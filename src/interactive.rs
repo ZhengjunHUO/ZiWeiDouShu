@@ -1,11 +1,11 @@
 use chrono::Datelike;
-use inquire::{DateSelect, Text};
 use inquire::autocompletion::{Autocomplete, Replacement};
 use inquire::error::CustomUserError;
+use inquire::{DateSelect, Select, Text};
 
 #[derive(Clone)]
-pub struct HourCompleter {
-    pub hours: Vec<String>,
+struct HourCompleter {
+    hours: Vec<String>,
 }
 
 impl HourCompleter {
@@ -44,7 +44,7 @@ impl Autocomplete for HourCompleter {
     }
 }
 
-pub fn birthday_from_prompt() -> (i32, u32, u32, f64) {
+pub(crate) fn birthday_from_prompt() -> (i32, u32, u32, f64, bool) {
     let start = chrono::NaiveDate::from_ymd_opt(1990, 6, 1).unwrap();
     let chosen = DateSelect::new("Your birthday in gregorian calendar: ")
         .with_default(start)
@@ -68,6 +68,14 @@ pub fn birthday_from_prompt() -> (i32, u32, u32, f64) {
         Err(err) => println!("Error retrieving your response: {}", err),
     }
 
+    let mut is_male = false;
+    let options: Vec<&str> = vec!["男", "女"];
+    let ans = Select::new("The gender ?", options).prompt();
+    match ans {
+        Ok(g) => is_male = g == "男",
+        Err(err) => println!("Error retrieving gender: {}", err),
+    }
+
     println!("公曆生日: {}年{}月{}日{}時", year, month, day, hour);
-    (year, month, day, hour)
+    (year, month, day, hour, is_male)
 }
