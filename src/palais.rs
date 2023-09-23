@@ -1,4 +1,5 @@
 use crate::consts::{GAN, PALAIS, ZHI};
+use crate::structs::Birthday;
 
 #[derive(Debug, Default)]
 pub(crate) struct Palais {
@@ -14,9 +15,15 @@ pub(crate) struct Palais {
 #[derive(Debug, Default)]
 pub(crate) struct Mingpan {
     pub(crate) all_palais: [Palais; 12],
+    pub(crate) info: String,
 }
 
 impl Mingpan {
+    pub(crate) fn with_info(mut self, birth: &Birthday) -> Self {
+        self.info = format!("{}", birth);
+        self
+    }
+
     /// 定十二宫天干
     pub(crate) fn with_tiangan_name(mut self, year_gan_idx: usize) -> Self {
         let start_idx = ((year_gan_idx % 5) * 2 + 2) % 10;

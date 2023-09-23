@@ -3,3 +3,4 @@ mod consts;
 pub mod interactive;
 mod palais;
 mod structs;
+mod tui;
