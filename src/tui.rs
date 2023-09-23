@@ -16,6 +16,16 @@ use tui::{
     Frame, Terminal,
 };
 
+macro_rules! render_block {
+    ($mp: ident, $frame: ident, $build_block: ident, $mp_idx: expr, $target: ident, $target_idx: expr) => {
+        let text = vec![Spans::from($mp.all_palais[$mp_idx].gz_name.clone())];
+        let paragraph = Paragraph::new(text)
+            .block($build_block($mp.all_palais[$mp_idx].name.clone()))
+            .alignment(Alignment::Right);
+        $frame.render_widget(paragraph, $target[$target_idx]);
+    };
+}
+
 lazy_static! {
     static ref MINGPAN: Mutex<Mingpan> = Mutex::new(Mingpan::default());
 }
@@ -152,36 +162,19 @@ fn ui<B: Backend>(f: &mut Frame<B>) {
     let mp = MINGPAN.lock().unwrap();
 
     (5..9).into_iter().for_each(|idx| {
-        let text = vec![Spans::from(mp.all_palais[idx].gz_name.clone())];
-        let paragraph = Paragraph::new(text)
-            //.style(Style::default().bg(Color::White).fg(Color::Black))
-            .block(build_block(mp.all_palais[idx].name.clone()))
-            .alignment(Alignment::Right);
-        f.render_widget(paragraph, top_horz[idx - 5]);
+        render_block!(mp, f, build_block, idx, top_horz, idx - 5);
     });
 
     (11..15).rev().into_iter().for_each(|idx| {
-        let text = vec![Spans::from(mp.all_palais[idx % 12].gz_name.clone())];
-        let paragraph = Paragraph::new(text)
-            .block(build_block(mp.all_palais[idx % 12].name.clone()))
-            .alignment(Alignment::Right);
-        f.render_widget(paragraph, bottom_horz[14 - idx]);
+        render_block!(mp, f, build_block, idx % 12, bottom_horz, 14 - idx);
     });
 
-    (3..5).into_iter().for_each(|idx| {
-        let text = vec![Spans::from(mp.all_palais[idx].gz_name.clone())];
-        let paragraph = Paragraph::new(text)
-            .block(build_block(mp.all_palais[idx].name.clone()))
-            .alignment(Alignment::Right);
-        f.render_widget(paragraph, mid_left_parts[4 - idx]);
+    (3..5).rev().into_iter().for_each(|idx| {
+        render_block!(mp, f, build_block, idx, mid_left_parts, 4 - idx);
     });
 
     (9..11).into_iter().for_each(|idx| {
-        let text = vec![Spans::from(mp.all_palais[idx].gz_name.clone())];
-        let paragraph = Paragraph::new(text)
-            .block(build_block(mp.all_palais[idx].name.clone()))
-            .alignment(Alignment::Right);
-        f.render_widget(paragraph, mid_right_parts[idx - 9]);
+        render_block!(mp, f, build_block, idx, mid_right_parts, idx - 9);
     });
 
     // Center big block
