@@ -44,7 +44,7 @@ impl Autocomplete for HourCompleter {
     }
 }
 
-pub(crate) fn birthday_from_prompt() -> (i32, u32, u32, f64, bool) {
+pub fn birthday_from_prompt() -> (i32, u32, u32, f64, bool) {
     let start = chrono::NaiveDate::from_ymd_opt(1990, 6, 1).unwrap();
     let chosen = DateSelect::new("Your birthday in gregorian calendar: ")
         .with_default(start)

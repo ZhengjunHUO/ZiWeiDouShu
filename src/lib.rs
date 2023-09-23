@@ -1,3 +1,5 @@
 pub mod calc;
-mod interactive;
+mod consts;
+pub mod interactive;
+mod palais;
 mod structs;

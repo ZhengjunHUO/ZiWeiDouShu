@@ -8,5 +8,6 @@ edition = "2021"
 [dependencies]
 chrono = "0.4.26"
 inquire = { version = "0.6.2", features = ["date"] }
+lazy_static = "1.4.0"
 lunardate = "0.2"
 rust-ephemeris = { git = "https://github.com/tyxk8160/ephemeris.git", branch = "master" }
