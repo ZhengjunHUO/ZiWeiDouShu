@@ -28,6 +28,16 @@ pub(crate) const ZIWEI_SYSTEM: [(usize, &str); 6] = [
     (9, "太阳"),
     (11, "天机"),
 ];
+pub(crate) const TIANFU_SYSTEM: [(usize, &str); 8] = [
+    (0, "天府"),
+    (1, "太阴"),
+    (2, "贪狼"),
+    (3, "巨门"),
+    (4, "天相"),
+    (5, "天梁"),
+    (6, "七杀"),
+    (10, "破军"),
+];
 
 lazy_static! {
     pub(crate) static ref GAN_DICT: HashMap<String, usize> = GAN

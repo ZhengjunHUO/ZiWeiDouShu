@@ -1,4 +1,4 @@
-use crate::consts::{GAN, PALAIS, WUXINGJU, WUXINGJU_DICT, ZHI, ZIWEI_SYSTEM};
+use crate::consts::{GAN, PALAIS, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT, ZHI, ZIWEI_SYSTEM};
 use crate::structs::Birthday;
 
 #[derive(Debug, Default)]
@@ -18,6 +18,7 @@ pub(crate) struct Mingpan {
     pub(crate) all_palais: [Palais; 12],
     pub(crate) info: String,
     pub(crate) ming_idx: usize,
+    pub(crate) ziwei_idx: usize,
     pub(crate) wxj_idx: usize,
 }
 
@@ -75,21 +76,32 @@ impl Mingpan {
     /// 安紫微星系，dep: with_wuxingju
     pub(crate) fn with_ziwei(mut self, day: usize) -> Self {
         let ju = self.wxj_idx + 2;
-        let ziwei_idx;
         if day % ju == 0 {
-            ziwei_idx = (day / ju + 1) % 12;
+            self.ziwei_idx = (day / ju + 1) % 12;
         } else {
             let delta = ju - day % ju;
             let temp = day / ju + 2;
             if delta % 2 == 1 {
-                ziwei_idx = (temp - delta + 12) % 12;
+                self.ziwei_idx = (temp - delta + 12) % 12;
             } else {
-                ziwei_idx = (temp + delta) % 12;
+                self.ziwei_idx = (temp + delta) % 12;
             }
         }
 
         ZIWEI_SYSTEM.iter().for_each(|&(idx, star)| {
-            self.all_palais[(ziwei_idx + idx) % 12]
+            self.all_palais[(self.ziwei_idx + idx) % 12]
+                .stars_a
+                .push(star.to_owned());
+        });
+        self
+    }
+
+    /// 安天府星系，dep: with_ziwei
+    pub(crate) fn with_tianfu(mut self) -> Self {
+        let tianfu_idx = (16 - self.ziwei_idx) % 12;
+
+        TIANFU_SYSTEM.iter().for_each(|&(idx, star)| {
+            self.all_palais[(tianfu_idx + idx) % 12]
                 .stars_a
                 .push(star.to_owned());
         });
