@@ -90,7 +90,7 @@ impl Mingpan {
             let delta = ju - day % ju;
             let temp = day / ju + 2;
             if delta % 2 == 1 {
-                self.ziwei_idx = (temp - delta + 12) % 12;
+                self.ziwei_idx = (12 + temp - delta) % 12;
             } else {
                 self.ziwei_idx = (temp + delta) % 12;
             }
@@ -118,7 +118,7 @@ impl Mingpan {
 
     /// 安时系星
     pub(crate) fn with_hour_based(mut self, hour: usize, nian_zhi: usize) -> Self {
-        push_star!(self, 10 - hour + 12, stars_b, "文昌");
+        push_star!(self, 22 - hour, stars_b, "文昌");
         push_star!(self, hour + 4, stars_b, "文曲");
 
         let huo_idx;
@@ -160,7 +160,7 @@ impl Mingpan {
     /// 安月系星
     pub(crate) fn with_month_based(mut self, month: usize) -> Self {
         push_star!(self, month + 3, stars_b, "左辅");
-        push_star!(self, 11 - month + 12, stars_b, "右弼");
+        push_star!(self, 23 - month, stars_b, "右弼");
         push_star!(self, month + 8, stars_c, "天刑");
         push_star!(self, month, stars_c, "天姚");
 
@@ -180,6 +180,18 @@ impl Mingpan {
         push_star!(self, tianyue[month - 1], stars_c, "天月");
 
         push_star!(self, (28 - month * 2), stars_c, "阴煞");
+        self
+    }
+
+    /// 安日系星
+    pub(crate) fn with_day_based(mut self, day: usize, month: usize, hour: usize) -> Self {
+        // 基于左辅右弼计算
+        push_star!(self, month + 3 + day - 1, stars_c, "三台");
+        push_star!(self, 47 - month - (day - 1), stars_c, "八座");
+        // 基于文昌文曲计算
+        push_star!(self, 22 - hour + day - 2, stars_c, "恩光");
+        push_star!(self, hour + 4 + day - 2, stars_c, "天贵");
+
         self
     }
 }
