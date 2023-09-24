@@ -18,11 +18,25 @@ use tui::{
 
 macro_rules! render_block {
     ($mp: ident, $frame: ident, $build_block: ident, $mp_idx: expr, $target: ident, $target_idx: expr) => {
-        let text = vec![Spans::from($mp.all_palais[$mp_idx].gz_name.clone())];
-        let paragraph = Paragraph::new(text)
+        let stars: Vec<_> = $mp.all_palais[$mp_idx]
+            .stars_a
+            .clone()
+            .into_iter()
+            .map(|s| Spans::from(Span::styled(s, Style::default().fg(Color::Red))))
+            .collect();
+        let paragraph_left = Paragraph::new(stars)
+            .block($build_block(String::default()))
+            .alignment(Alignment::Left);
+        $frame.render_widget(paragraph_left, $target[$target_idx]);
+
+        let text = vec![Spans::from(Span::styled(
+            $mp.all_palais[$mp_idx].gz_name.clone(),
+            Style::default().fg(Color::Blue),
+        ))];
+        let paragraph_right = Paragraph::new(text)
             .block($build_block($mp.all_palais[$mp_idx].name.clone()))
             .alignment(Alignment::Right);
-        $frame.render_widget(paragraph, $target[$target_idx]);
+        $frame.render_widget(paragraph_right, $target[$target_idx]);
     };
 }
 
@@ -151,7 +165,6 @@ fn ui<B: Backend>(f: &mut Frame<B>) {
         Block::default()
             .borders(Borders::ALL)
             //.style(Style::default().bg(Color::White).fg(Color::Blue))
-            .style(Style::default().fg(Color::Blue))
             .title_alignment(Alignment::Center)
             .title(Span::styled(
                 title,

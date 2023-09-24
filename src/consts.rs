@@ -20,6 +20,14 @@ pub(crate) const PALAIS: [&str; 12] = [
     "兄弟宫",
 ];
 pub(crate) const WUXINGJU: [&str; 5] = ["水二局", "木三局", "金四局", "土五局", "火六局"];
+pub(crate) const ZIWEI_SYSTEM: [(usize, &str); 6] = [
+    (0, "紫微"),
+    (4, "廉贞"),
+    (7, "天同"),
+    (8, "武曲"),
+    (9, "太阳"),
+    (11, "天机"),
+];
 
 lazy_static! {
     pub(crate) static ref GAN_DICT: HashMap<String, usize> = GAN

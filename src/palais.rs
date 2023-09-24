@@ -1,4 +1,4 @@
-use crate::consts::{GAN, PALAIS, WUXINGJU, WUXINGJU_DICT, ZHI};
+use crate::consts::{GAN, PALAIS, WUXINGJU, WUXINGJU_DICT, ZHI, ZIWEI_SYSTEM};
 use crate::structs::Birthday;
 
 #[derive(Debug, Default)]
@@ -69,6 +69,30 @@ impl Mingpan {
         self.wxj_idx = *WUXINGJU_DICT.get(&(gan / 2, zhi / 2)).unwrap();
         self.info.push_str("\n");
         self.info.push_str(WUXINGJU[self.wxj_idx]);
+        self
+    }
+
+    /// 安紫微星系，dep: with_wuxingju
+    pub(crate) fn with_ziwei(mut self, day: usize) -> Self {
+        let ju = self.wxj_idx + 2;
+        let ziwei_idx;
+        if day % ju == 0 {
+            ziwei_idx = (day / ju + 1) % 12;
+        } else {
+            let delta = ju - day % ju;
+            let temp = day / ju + 2;
+            if delta % 2 == 1 {
+                ziwei_idx = (temp - delta + 12) % 12;
+            } else {
+                ziwei_idx = (temp + delta) % 12;
+            }
+        }
+
+        ZIWEI_SYSTEM.iter().for_each(|&(idx, star)| {
+            self.all_palais[(ziwei_idx + idx) % 12]
+                .stars_a
+                .push(star.to_owned());
+        });
         self
     }
 }
