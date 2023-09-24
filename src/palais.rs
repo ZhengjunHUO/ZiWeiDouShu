@@ -1,10 +1,11 @@
-use crate::consts::{GAN, PALAIS, ZHI};
+use crate::consts::{GAN, PALAIS, WUXINGJU, WUXINGJU_DICT, ZHI};
 use crate::structs::Birthday;
 
 #[derive(Debug, Default)]
 pub(crate) struct Palais {
     pub(crate) name: String,
     pub(crate) gz_name: String,
+    pub(crate) gz_idx: (usize, usize),
     pub(crate) daxian: String,
     pub(crate) xiaoxian: String,
     pub(crate) stars_a: Vec<String>,
@@ -16,6 +17,8 @@ pub(crate) struct Palais {
 pub(crate) struct Mingpan {
     pub(crate) all_palais: [Palais; 12],
     pub(crate) info: String,
+    pub(crate) ming_idx: usize,
+    pub(crate) wxj_idx: usize,
 }
 
 impl Mingpan {
@@ -30,7 +33,8 @@ impl Mingpan {
 
         (0..12).into_iter().for_each(|idx| {
             self.all_palais[(2 + idx) % 12].gz_name =
-                format!("{}{}", GAN[(start_idx + idx) % 10], ZHI[(2 + idx) % 12])
+                format!("{}{}", GAN[(start_idx + idx) % 10], ZHI[(2 + idx) % 12]);
+            self.all_palais[(2 + idx) % 12].gz_idx = ((start_idx + idx) % 10, (2 + idx) % 12);
         });
         self
     }
@@ -39,6 +43,7 @@ impl Mingpan {
     pub(crate) fn with_shenming_palais(mut self, month: usize, hour: usize) -> Self {
         let zishi_idx = (1 + month) % 12;
         let ming_idx = (zishi_idx + 12 - hour) % 12;
+        self.ming_idx = ming_idx;
         let shen_idx = (zishi_idx + hour) % 12;
 
         (0..12).into_iter().for_each(|idx| {
@@ -49,6 +54,21 @@ impl Mingpan {
             }
             self.all_palais[curr_idx].name = curr_name;
         });
+        self
+    }
+
+    /// 定五行局，dep: with_tiangan_name & with_shenming_palais
+    pub(crate) fn with_wuxingju(mut self) -> Self {
+        let gz = self.all_palais[self.ming_idx].gz_idx;
+        let gan = gz.0;
+        let mut zhi = gz.1;
+        if zhi >= 6 {
+            zhi = zhi - 6;
+        }
+
+        self.wxj_idx = *WUXINGJU_DICT.get(&(gan / 2, zhi / 2)).unwrap();
+        self.info.push_str("\n");
+        self.info.push_str(WUXINGJU[self.wxj_idx]);
         self
     }
 }

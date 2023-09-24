@@ -13,7 +13,8 @@ pub fn build_palais(info: (i32, u32, u32, f64, bool)) {
         .with_shenming_palais(
             birth.lunar.month() as usize,
             *ZHI_DICT.get(birth.hour.zhi()).unwrap(),
-        );
+        )
+        .with_wuxingju();
 
     match display_palais(mp) {
         Ok(_) => (),

@@ -19,6 +19,7 @@ pub(crate) const PALAIS: [&str; 12] = [
     "夫妻宫",
     "兄弟宫",
 ];
+pub(crate) const WUXINGJU: [&str; 5] = ["水二局", "木三局", "金四局", "土五局", "火六局"];
 
 lazy_static! {
     pub(crate) static ref GAN_DICT: HashMap<String, usize> = GAN
@@ -31,6 +32,23 @@ lazy_static! {
         .enumerate()
         .map(|(idx, &s)| (String::from(s), idx))
         .collect();
+    pub(crate) static ref WUXINGJU_DICT: HashMap<(usize, usize), usize> = HashMap::from([
+        ((0, 0), 2),
+        ((0, 1), 0),
+        ((0, 2), 4),
+        ((1, 0), 0),
+        ((1, 1), 4),
+        ((1, 2), 3),
+        ((2, 0), 4),
+        ((2, 1), 3),
+        ((2, 2), 1),
+        ((3, 0), 3),
+        ((3, 1), 1),
+        ((3, 2), 2),
+        ((4, 0), 1),
+        ((4, 1), 2),
+        ((4, 2), 0),
+    ]);
 }
 
 #[cfg(test)]
