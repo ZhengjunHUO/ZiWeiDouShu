@@ -18,16 +18,36 @@ use tui::{
 
 macro_rules! render_block {
     ($mp: ident, $frame: ident, $build_block: ident, $mp_idx: expr, $target: ident, $target_idx: expr) => {
-        let stars: Vec<_> = $mp.all_palais[$mp_idx]
+        let mut stars: Vec<_> = $mp.all_palais[$mp_idx]
             .stars_a
             .clone()
             .into_iter()
             .map(|s| Spans::from(Span::styled(s, Style::default().fg(Color::Red))))
             .collect();
+        let sub_stars: Vec<_> = $mp.all_palais[$mp_idx]
+            .stars_b
+            .clone()
+            .into_iter()
+            .map(|s| Spans::from(Span::styled(s, Style::default().fg(Color::Yellow))))
+            .collect();
+        stars.extend(sub_stars);
+
+        let stars_2: Vec<_> = $mp.all_palais[$mp_idx]
+            .stars_c
+            .clone()
+            .into_iter()
+            .map(|s| Spans::from(Span::styled(s, Style::default().fg(Color::Yellow))))
+            .collect();
+
         let paragraph_left = Paragraph::new(stars)
             .block($build_block(String::default()))
             .alignment(Alignment::Left);
         $frame.render_widget(paragraph_left, $target[$target_idx]);
+
+        let paragraph_middle = Paragraph::new(stars_2)
+            .block($build_block(String::default()))
+            .alignment(Alignment::Center);
+        $frame.render_widget(paragraph_middle, $target[$target_idx]);
 
         let text = vec![Spans::from(Span::styled(
             $mp.all_palais[$mp_idx].gz_name.clone(),

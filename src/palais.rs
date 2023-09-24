@@ -22,6 +22,14 @@ pub(crate) struct Mingpan {
     pub(crate) wxj_idx: usize,
 }
 
+macro_rules! push_star {
+    ($obj: ident, $palais_idx: expr, $star_array: ident, $star_name: literal) => {
+        $obj.all_palais[$palais_idx]
+            .$star_array
+            .push(String::from($star_name));
+    };
+}
+
 impl Mingpan {
     pub(crate) fn with_info(mut self, birth: &Birthday) -> Self {
         self.info = format!("{}", birth);
@@ -105,6 +113,47 @@ impl Mingpan {
                 .stars_a
                 .push(star.to_owned());
         });
+        self
+    }
+
+    /// 安时系星
+    pub(crate) fn with_hour_based(mut self, hour: usize, nian_zhi: usize) -> Self {
+        push_star!(self, (10 - hour + 12) % 12, stars_b, "文昌");
+        push_star!(self, (hour + 4) % 12, stars_b, "文曲");
+
+        let huo_idx;
+        let ling_idx;
+        match nian_zhi % 4 {
+            // 子辰申
+            0 => {
+                huo_idx = (hour + 2) % 12;
+                ling_idx = (hour + 10) % 12;
+            }
+            // 丑巳酉
+            1 => {
+                huo_idx = (hour + 3) % 12;
+                ling_idx = (hour + 10) % 12;
+            }
+            // 寅午戌
+            2 => {
+                huo_idx = (hour + 1) % 12;
+                ling_idx = (hour + 3) % 12;
+            }
+            // 卯未亥
+            3 => {
+                huo_idx = (hour + 9) % 12;
+                ling_idx = (hour + 10) % 12;
+            }
+            _ => unreachable!(),
+        }
+        push_star!(self, huo_idx, stars_b, "火星");
+        push_star!(self, ling_idx, stars_b, "铃星");
+
+        push_star!(self, 11 - hour, stars_b, "地空");
+        push_star!(self, (hour + 11) % 12, stars_b, "地劫");
+        push_star!(self, (hour + 6) % 12, stars_c, "台辅");
+        push_star!(self, (hour + 2) % 12, stars_c, "封诰");
+
         self
     }
 }
