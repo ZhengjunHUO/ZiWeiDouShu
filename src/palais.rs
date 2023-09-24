@@ -194,4 +194,20 @@ impl Mingpan {
 
         self
     }
+
+    /// 安年干系星
+    pub(crate) fn with_year_gan_based(mut self, year_gan_idx: usize) -> Self {
+        let lucun: [usize; 10] = [2, 3, 5, 6, 5, 6, 8, 9, 11, 0];
+        let lucun_idx = lucun[year_gan_idx];
+        push_star!(self, lucun_idx, stars_b, "禄存");
+        push_star!(self, lucun_idx + 1, stars_b, "擎羊");
+        push_star!(self, lucun_idx + 11, stars_b, "陀罗");
+
+        let tiankui: [usize; 10] = [1, 0, 11, 11, 1, 0, 1, 6, 3, 3];
+        let tianyue: [usize; 10] = [7, 8, 9, 9, 7, 8, 7, 2, 5, 5];
+        push_star!(self, tiankui[year_gan_idx], stars_b, "天魁");
+        push_star!(self, tianyue[year_gan_idx], stars_b, "天钺");
+
+        self
+    }
 }

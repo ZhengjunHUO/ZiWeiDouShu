@@ -22,13 +22,13 @@ macro_rules! render_block {
             .stars_a
             .clone()
             .into_iter()
-            .map(|s| Spans::from(Span::styled(s, Style::default().fg(Color::Red))))
+            .map(|s| Spans::from(Span::styled(s, Style::default().fg(Color::LightRed))))
             .collect();
         let sub_stars: Vec<_> = $mp.all_palais[$mp_idx]
             .stars_b
             .clone()
             .into_iter()
-            .map(|s| Spans::from(Span::styled(s, Style::default().fg(Color::Yellow))))
+            .map(|s| Spans::from(Span::styled(s, Style::default().fg(Color::Magenta))))
             .collect();
         stars.extend(sub_stars);
 
