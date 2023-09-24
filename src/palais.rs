@@ -24,7 +24,7 @@ pub(crate) struct Mingpan {
 
 macro_rules! push_star {
     ($obj: ident, $palais_idx: expr, $star_array: ident, $star_name: literal) => {
-        $obj.all_palais[$palais_idx]
+        $obj.all_palais[($palais_idx) % 12]
             .$star_array
             .push(String::from($star_name));
     };
@@ -118,31 +118,31 @@ impl Mingpan {
 
     /// 安时系星
     pub(crate) fn with_hour_based(mut self, hour: usize, nian_zhi: usize) -> Self {
-        push_star!(self, (10 - hour + 12) % 12, stars_b, "文昌");
-        push_star!(self, (hour + 4) % 12, stars_b, "文曲");
+        push_star!(self, 10 - hour + 12, stars_b, "文昌");
+        push_star!(self, hour + 4, stars_b, "文曲");
 
         let huo_idx;
         let ling_idx;
         match nian_zhi % 4 {
             // 子辰申
             0 => {
-                huo_idx = (hour + 2) % 12;
-                ling_idx = (hour + 10) % 12;
+                huo_idx = hour + 2;
+                ling_idx = hour + 10;
             }
             // 丑巳酉
             1 => {
-                huo_idx = (hour + 3) % 12;
-                ling_idx = (hour + 10) % 12;
+                huo_idx = hour + 3;
+                ling_idx = hour + 10;
             }
             // 寅午戌
             2 => {
-                huo_idx = (hour + 1) % 12;
-                ling_idx = (hour + 3) % 12;
+                huo_idx = hour + 1;
+                ling_idx = hour + 3;
             }
             // 卯未亥
             3 => {
-                huo_idx = (hour + 9) % 12;
-                ling_idx = (hour + 10) % 12;
+                huo_idx = hour + 9;
+                ling_idx = hour + 10;
             }
             _ => unreachable!(),
         }
@@ -150,10 +150,36 @@ impl Mingpan {
         push_star!(self, ling_idx, stars_b, "铃星");
 
         push_star!(self, 11 - hour, stars_b, "地空");
-        push_star!(self, (hour + 11) % 12, stars_b, "地劫");
-        push_star!(self, (hour + 6) % 12, stars_c, "台辅");
-        push_star!(self, (hour + 2) % 12, stars_c, "封诰");
+        push_star!(self, hour + 11, stars_b, "地劫");
+        push_star!(self, hour + 6, stars_c, "台辅");
+        push_star!(self, hour + 2, stars_c, "封诰");
 
+        self
+    }
+
+    /// 安月系星
+    pub(crate) fn with_month_based(mut self, month: usize) -> Self {
+        push_star!(self, month + 3, stars_b, "左辅");
+        push_star!(self, 11 - month + 12, stars_b, "右弼");
+        push_star!(self, month + 8, stars_c, "天刑");
+        push_star!(self, month, stars_c, "天姚");
+
+        let yuema: [usize; 4] = [8, 5, 2, 11];
+        push_star!(self, yuema[(month - 1) % 4], stars_c, "月马");
+
+        if (month + 7) % 2 == 0 {
+            push_star!(self, month + 7, stars_c, "解神");
+        } else {
+            push_star!(self, month + 6, stars_c, "解神");
+        }
+
+        let tianwu: [usize; 4] = [5, 8, 2, 11];
+        push_star!(self, tianwu[(month - 1) % 4], stars_c, "天巫");
+
+        let tianyue: [usize; 12] = [10, 5, 4, 2, 7, 3, 11, 7, 2, 6, 10, 2];
+        push_star!(self, tianyue[month - 1], stars_c, "天月");
+
+        push_star!(self, (28 - month * 2), stars_c, "阴煞");
         self
     }
 }

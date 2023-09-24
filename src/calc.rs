@@ -16,7 +16,8 @@ pub fn build_palais(info: (i32, u32, u32, f64, bool)) {
         .with_wuxingju()
         .with_ziwei(birth.lunar.day() as usize)
         .with_tianfu()
-        .with_hour_based(birth_hour_idx, birth.year.1 as usize);
+        .with_hour_based(birth_hour_idx, birth.year.1 as usize)
+        .with_month_based(birth.lunar.month() as usize);
 
     match display_palais(mp) {
         Ok(_) => (),
