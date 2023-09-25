@@ -1,4 +1,6 @@
-use crate::consts::{GAN, PALAIS, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT, ZHI, ZIWEI_SYSTEM};
+use crate::consts::{
+    GAN, PALAIS, SIHUAXING, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT, ZHI, ZIWEI_SYSTEM,
+};
 use crate::structs::Birthday;
 
 #[derive(Debug, Default)]
@@ -8,7 +10,7 @@ pub(crate) struct Palais {
     pub(crate) gz_idx: (usize, usize),
     pub(crate) daxian: String,
     pub(crate) xiaoxian: String,
-    pub(crate) stars_a: Vec<String>,
+    pub(crate) stars_a: Vec<Etoile>,
     pub(crate) stars_b: Vec<String>,
     pub(crate) stars_c: Vec<String>,
 }
@@ -20,6 +22,25 @@ pub(crate) struct Mingpan {
     pub(crate) ming_idx: usize,
     pub(crate) ziwei_idx: usize,
     pub(crate) wxj_idx: usize,
+}
+
+#[derive(Debug, Default)]
+pub(crate) struct Etoile {
+    pub(crate) name: String,
+    pub(crate) lumino: usize,
+    pub(crate) hua: Option<usize>,
+}
+
+impl std::string::ToString for Etoile {
+    fn to_string(&self) -> String {
+        let mut rslt = self.name.clone();
+        // TODO: Look into dict for lumino
+        match self.hua {
+            Some(i) => rslt.push_str(SIHUAXING[i]),
+            None => (),
+        }
+        rslt
+    }
 }
 
 macro_rules! push_star {
@@ -99,7 +120,11 @@ impl Mingpan {
         ZIWEI_SYSTEM.iter().for_each(|&(idx, star)| {
             self.all_palais[(self.ziwei_idx + idx) % 12]
                 .stars_a
-                .push(star.to_owned());
+                .push(Etoile {
+                    name: star.to_owned(),
+                    lumino: 0,
+                    hua: None,
+                });
         });
         self
     }
@@ -111,7 +136,11 @@ impl Mingpan {
         TIANFU_SYSTEM.iter().for_each(|&(idx, star)| {
             self.all_palais[(tianfu_idx + idx) % 12]
                 .stars_a
-                .push(star.to_owned());
+                .push(Etoile {
+                    name: star.to_owned(),
+                    lumino: 0,
+                    hua: None,
+                });
         });
         self
     }

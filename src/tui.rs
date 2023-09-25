@@ -20,9 +20,13 @@ macro_rules! render_block {
     ($mp: ident, $frame: ident, $build_block: ident, $mp_idx: expr, $target: ident, $target_idx: expr) => {
         let mut stars: Vec<_> = $mp.all_palais[$mp_idx]
             .stars_a
-            .clone()
-            .into_iter()
-            .map(|s| Spans::from(Span::styled(s, Style::default().fg(Color::LightRed))))
+            .iter()
+            .map(|s| {
+                Spans::from(Span::styled(
+                    s.to_string(),
+                    Style::default().fg(Color::LightRed),
+                ))
+            })
             .collect();
         let sub_stars: Vec<_> = $mp.all_palais[$mp_idx]
             .stars_b

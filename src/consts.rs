@@ -1,5 +1,6 @@
 use lazy_static::lazy_static;
 use std::collections::HashMap;
+use std::sync::Mutex;
 
 pub(crate) const GAN: [&str; 10] = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];
 pub(crate) const ZHI: [&str; 12] = [
@@ -38,6 +39,19 @@ pub(crate) const TIANFU_SYSTEM: [(usize, &str); 8] = [
     (6, "七杀"),
     (10, "破军"),
 ];
+pub(crate) const SIHUAXING: [&str; 4] = ["禄", "权", "科", "忌"];
+pub(crate) const SIHUA_MAP: [(usize, usize, usize, usize); 10] = [
+    (5, 13, 3, 2),
+    (1, 11, 0, 7),
+    (4, 1, 16, 5),
+    (7, 4, 1, 9),
+    (8, 7, 15, 1),
+    (3, 8, 11, 17),
+    (2, 3, 7, 4),
+    (9, 2, 17, 16),
+    (11, 0, 14, 3),
+    (13, 9, 7, 8),
+];
 
 lazy_static! {
     pub(crate) static ref GAN_DICT: HashMap<String, usize> = GAN
@@ -66,6 +80,36 @@ lazy_static! {
         ((4, 0), 1),
         ((4, 1), 2),
         ((4, 2), 0),
+    ]);
+    pub(crate) static ref MAIN_STARS: Mutex<[(&'static str, usize); 28]> = Mutex::new([
+        ("紫微", 0),
+        ("天机", 0),
+        ("太阳", 0),
+        ("武曲", 0),
+        ("天同", 0),
+        ("廉贞", 0),
+        ("天府", 0),
+        ("太阴", 0),
+        ("贪狼", 0),
+        ("巨门", 0),
+        ("天相", 0),
+        ("天梁", 0),
+        ("七杀", 0),
+        ("破军", 0),
+        ("左辅", 0),
+        ("右弼", 0),
+        ("文昌", 0),
+        ("文曲", 0),
+        ("天魁", 0),
+        ("天钺", 0),
+        ("擎羊", 0),
+        ("陀罗", 0),
+        ("火星", 0),
+        ("铃星", 0),
+        ("地空", 0),
+        ("地劫", 0),
+        ("禄存", 0),
+        ("天马", 0)
     ]);
 }
 
