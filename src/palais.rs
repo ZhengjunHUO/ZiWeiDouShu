@@ -1,6 +1,8 @@
 use crate::consts::{
-    GAN, PALAIS, SIHUAXING, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT, ZHI, ZIWEI_SYSTEM,
+    GAN, MAIN_STARS, PALAIS, SIHUAXING, SIHUA_MAP, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT, ZHI,
+    ZIWEI_SYSTEM,
 };
+use crate::global::MAIN_STARS_LOCATION;
 use crate::structs::Birthday;
 
 #[derive(Debug, Default)]
@@ -117,6 +119,7 @@ impl Mingpan {
             }
         }
 
+        let mut ms = MAIN_STARS_LOCATION.lock().unwrap();
         ZIWEI_SYSTEM.iter().for_each(|&(idx, star)| {
             self.all_palais[(self.ziwei_idx + idx) % 12]
                 .stars_a
@@ -125,6 +128,8 @@ impl Mingpan {
                     lumino: 0,
                     hua: None,
                 });
+            ms.entry(star)
+                .and_modify(|loc| *loc = (self.ziwei_idx + idx) % 12);
         });
         self
     }
@@ -133,6 +138,7 @@ impl Mingpan {
     pub(crate) fn with_tianfu(mut self) -> Self {
         let tianfu_idx = (16 - self.ziwei_idx) % 12;
 
+        let mut ms = MAIN_STARS_LOCATION.lock().unwrap();
         TIANFU_SYSTEM.iter().for_each(|&(idx, star)| {
             self.all_palais[(tianfu_idx + idx) % 12]
                 .stars_a
@@ -141,7 +147,10 @@ impl Mingpan {
                     lumino: 0,
                     hua: None,
                 });
+            ms.entry(star)
+                .and_modify(|loc| *loc = (tianfu_idx + idx) % 12);
         });
+
         self
     }
 
@@ -236,6 +245,21 @@ impl Mingpan {
         let tianyue: [usize; 10] = [7, 8, 9, 9, 7, 8, 7, 2, 5, 5];
         push_star!(self, tiankui[year_gan_idx], stars_b, "天魁");
         push_star!(self, tianyue[year_gan_idx], stars_b, "天钺");
+
+        // 四化星
+        let ms = MAIN_STARS_LOCATION.lock().unwrap();
+        let sihua = SIHUA_MAP[year_gan_idx];
+
+        for i in 0..4 {
+            let star = MAIN_STARS[sihua[i]];
+            let star_loc = *ms.get(star).unwrap();
+            for s in &mut self.all_palais[star_loc].stars_a {
+                if s.name == star {
+                    s.hua = Some(i);
+                    break;
+                }
+            }
+        }
 
         self
     }
