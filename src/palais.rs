@@ -89,7 +89,7 @@ impl Mingpan {
             let curr_idx = (ming_idx + idx) % 12;
             let mut curr_name = String::from(PALAIS[idx]);
             if curr_idx == shen_idx {
-                curr_name.push_str("-身宫");
+                curr_name.push_str("-身宮");
             }
             self.all_palais[curr_idx].name = curr_name;
         });
@@ -192,25 +192,25 @@ impl Mingpan {
             _ => unreachable!(),
         }
         push_star!(self, huo_idx, stars_b, "火星");
-        push_star!(self, ling_idx, stars_b, "铃星");
+        push_star!(self, ling_idx, stars_b, "鈴星");
 
         push_star!(self, 11 - hour, stars_b, "地空");
         push_star!(self, hour + 11, stars_b, "地劫");
-        push_star!(self, hour + 6, stars_c, "台辅");
-        push_star!(self, hour + 2, stars_c, "封诰");
+        push_star!(self, hour + 6, stars_c, "台輔");
+        push_star!(self, hour + 2, stars_c, "封誥");
 
         self
     }
 
     /// 安月系星
     pub(crate) fn with_month_based(mut self, month: usize) -> Self {
-        push_star!(self, month + 3, stars_b, "左辅");
+        push_star!(self, month + 3, stars_b, "左輔");
         push_star!(self, 23 - month, stars_b, "右弼");
         push_star!(self, month + 8, stars_c, "天刑");
         push_star!(self, month, stars_c, "天姚");
 
         let yuema: [usize; 4] = [8, 5, 2, 11];
-        push_star!(self, yuema[(month - 1) % 4], stars_c, "月马");
+        push_star!(self, yuema[(month - 1) % 4], stars_c, "月馬");
 
         if (month + 7) % 2 == 0 {
             push_star!(self, month + 7, stars_c, "解神");
@@ -224,7 +224,7 @@ impl Mingpan {
         let tianyue: [usize; 12] = [10, 5, 4, 2, 7, 3, 11, 7, 2, 6, 10, 2];
         push_star!(self, tianyue[month - 1], stars_c, "天月");
 
-        push_star!(self, (28 - month * 2), stars_c, "阴煞");
+        push_star!(self, (28 - month * 2), stars_c, "陰煞");
         self
     }
 
@@ -235,7 +235,7 @@ impl Mingpan {
         push_star!(self, 47 - month - (day - 1), stars_c, "八座");
         // 基于文昌文曲计算
         push_star!(self, 22 - hour + day - 2, stars_c, "恩光");
-        push_star!(self, hour + 4 + day - 2, stars_c, "天贵");
+        push_star!(self, hour + 4 + day - 2, stars_c, "天貴");
 
         self
     }
@@ -244,14 +244,19 @@ impl Mingpan {
     pub(crate) fn with_year_gan_based(mut self, year_gan_idx: usize) -> Self {
         let lucun: [usize; 10] = [2, 3, 5, 6, 5, 6, 8, 9, 11, 0];
         let lucun_idx = lucun[year_gan_idx];
-        push_star!(self, lucun_idx, stars_b, "禄存");
+        push_star!(self, lucun_idx, stars_b, "祿存");
         push_star!(self, lucun_idx + 1, stars_b, "擎羊");
-        push_star!(self, lucun_idx + 11, stars_b, "陀罗");
+        push_star!(self, lucun_idx + 11, stars_b, "陀羅");
 
         let tiankui: [usize; 10] = [1, 0, 11, 11, 1, 0, 1, 6, 3, 3];
         let tianyue: [usize; 10] = [7, 8, 9, 9, 7, 8, 7, 2, 5, 5];
         push_star!(self, tiankui[year_gan_idx], stars_b, "天魁");
-        push_star!(self, tianyue[year_gan_idx], stars_b, "天钺");
+        push_star!(self, tianyue[year_gan_idx], stars_b, "天鉞");
+
+        let tianguan: [usize; 10] = [7, 4, 5, 2, 3, 9, 11, 9, 10, 6];
+        let tianfu: [usize; 10] = [9, 8, 0, 11, 3, 2, 6, 5, 6, 5];
+        push_star!(self, tianguan[year_gan_idx], stars_c, "天官");
+        push_star!(self, tianfu[year_gan_idx], stars_c, "天福");
 
         // 四化星
         let ms = MAIN_STARS_LOCATION.lock().unwrap();

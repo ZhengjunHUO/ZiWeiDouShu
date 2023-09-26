@@ -21,10 +21,10 @@ impl Birthday {
             hour: sz.3,
             lunar: LunarDate::from_solar_date(info.0, info.1, info.2).unwrap(),
             gender: match (sz.0 .0 % 2 == 0, info.4) {
-                (true, true) => String::from("阳男"),
-                (true, false) => String::from("阳女"),
-                (false, true) => String::from("阴男"),
-                (false, false) => String::from("阴女"),
+                (true, true) => String::from("陽男"),
+                (true, false) => String::from("陽女"),
+                (false, true) => String::from("陰男"),
+                (false, false) => String::from("陰女"),
             },
         }
     }
