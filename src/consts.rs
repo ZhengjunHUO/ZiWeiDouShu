@@ -58,6 +58,10 @@ pub(crate) const MAIN_STARS: [&str; 28] = [
     "地空", "地劫", "祿存", "天馬",
 ];
 
+pub(crate) const BOSHI: [&str; 12] = [
+    "博士", "力士", "青龍", "小耗", "將軍", "奏書", "飛廉", "喜神", "病符", "大耗", "伏兵", "官府",
+];
+
 lazy_static! {
     pub(crate) static ref GAN_DICT: HashMap<String, usize> = GAN
         .iter()

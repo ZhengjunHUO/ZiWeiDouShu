@@ -1,6 +1,6 @@
 use crate::consts::{
-    GAN, MAIN_STARS, PALAIS, SIHUAXING, SIHUA_MAP, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT, ZHI,
-    ZIWEI_SYSTEM,
+    BOSHI, GAN, MAIN_STARS, PALAIS, SIHUAXING, SIHUA_MAP, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT,
+    ZHI, ZIWEI_SYSTEM,
 };
 use crate::global::MAIN_STARS_LOCATION;
 use crate::structs::Birthday;
@@ -53,7 +53,7 @@ impl std::string::ToString for Etoile {
 }
 
 macro_rules! push_star {
-    ($obj: ident, $palais_idx: expr, $star_array: ident, $star_name: literal) => {
+    ($obj: ident, $palais_idx: expr, $star_array: ident, $star_name: expr) => {
         $obj.all_palais[($palais_idx) % 12]
             .$star_array
             .push(Etoile::default().with_name(String::from($star_name)));
@@ -241,7 +241,7 @@ impl Mingpan {
     }
 
     /// 安年干系星
-    pub(crate) fn with_year_gan_based(mut self, year_gan_idx: usize) -> Self {
+    pub(crate) fn with_year_gan_based(mut self, year_gan_idx: usize, is_clockwise: bool) -> Self {
         let lucun: [usize; 10] = [2, 3, 5, 6, 5, 6, 8, 9, 11, 0];
         let lucun_idx = lucun[year_gan_idx];
         push_star!(self, lucun_idx, stars_b, "祿存");
@@ -277,6 +277,15 @@ impl Mingpan {
                     s.hua = Some(i);
                     break;
                 }
+            }
+        }
+
+        // 博士十二神
+        for i in 0..12 {
+            if is_clockwise {
+                push_star!(self, lucun_idx + i, stars_c, BOSHI[i]);
+            } else {
+                push_star!(self, 12 + lucun_idx - i, stars_c, BOSHI[i]);
             }
         }
 
