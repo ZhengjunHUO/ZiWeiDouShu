@@ -30,17 +30,25 @@ macro_rules! render_block {
             .collect();
         let sub_stars: Vec<_> = $mp.all_palais[$mp_idx]
             .stars_b
-            .clone()
-            .into_iter()
-            .map(|s| Spans::from(Span::styled(s, Style::default().fg(Color::Magenta))))
+            .iter()
+            .map(|s| {
+                Spans::from(Span::styled(
+                    s.to_string(),
+                    Style::default().fg(Color::Magenta),
+                ))
+            })
             .collect();
         stars.extend(sub_stars);
 
         let stars_2: Vec<_> = $mp.all_palais[$mp_idx]
             .stars_c
-            .clone()
-            .into_iter()
-            .map(|s| Spans::from(Span::styled(s, Style::default().fg(Color::Yellow))))
+            .iter()
+            .map(|s| {
+                Spans::from(Span::styled(
+                    s.to_string(),
+                    Style::default().fg(Color::Yellow),
+                ))
+            })
             .collect();
 
         let paragraph_left = Paragraph::new(stars)

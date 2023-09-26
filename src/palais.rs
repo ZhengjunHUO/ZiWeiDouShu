@@ -13,8 +13,8 @@ pub(crate) struct Palais {
     pub(crate) daxian: String,
     pub(crate) xiaoxian: String,
     pub(crate) stars_a: Vec<Etoile>,
-    pub(crate) stars_b: Vec<String>,
-    pub(crate) stars_c: Vec<String>,
+    pub(crate) stars_b: Vec<Etoile>,
+    pub(crate) stars_c: Vec<Etoile>,
 }
 
 #[derive(Debug, Default)]
@@ -33,6 +33,13 @@ pub(crate) struct Etoile {
     pub(crate) hua: Option<usize>,
 }
 
+impl Etoile {
+    pub(crate) fn with_name(mut self, name: String) -> Self {
+        self.name = name;
+        self
+    }
+}
+
 impl std::string::ToString for Etoile {
     fn to_string(&self) -> String {
         let mut rslt = self.name.clone();
@@ -49,7 +56,7 @@ macro_rules! push_star {
     ($obj: ident, $palais_idx: expr, $star_array: ident, $star_name: literal) => {
         $obj.all_palais[($palais_idx) % 12]
             .$star_array
-            .push(String::from($star_name));
+            .push(Etoile::default().with_name(String::from($star_name)));
     };
 }
 
@@ -253,7 +260,14 @@ impl Mingpan {
         for i in 0..4 {
             let star = MAIN_STARS[sihua[i]];
             let star_loc = *ms.get(star).unwrap();
-            for s in &mut self.all_palais[star_loc].stars_a {
+
+            let list;
+            if sihua[i] < 14 {
+                list = &mut self.all_palais[star_loc].stars_a
+            } else {
+                list = &mut self.all_palais[star_loc].stars_b
+            }
+            for s in list {
                 if s.name == star {
                     s.hua = Some(i);
                     break;
