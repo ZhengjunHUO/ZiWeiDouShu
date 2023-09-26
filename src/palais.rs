@@ -22,6 +22,7 @@ pub(crate) struct Mingpan {
     pub(crate) all_palais: [Palais; 12],
     pub(crate) info: String,
     pub(crate) ming_idx: usize,
+    pub(crate) shen_idx: usize,
     pub(crate) ziwei_idx: usize,
     pub(crate) wxj_idx: usize,
 }
@@ -84,6 +85,7 @@ impl Mingpan {
         let ming_idx = (zishi_idx + 12 - hour) % 12;
         self.ming_idx = ming_idx;
         let shen_idx = (zishi_idx + hour) % 12;
+        self.shen_idx = shen_idx;
 
         (0..12).into_iter().for_each(|idx| {
             let curr_idx = (ming_idx + idx) % 12;
@@ -288,6 +290,52 @@ impl Mingpan {
                 push_star!(self, 12 + lucun_idx - i, stars_c, BOSHI[i]);
             }
         }
+
+        self
+    }
+
+    /// 安年支系星
+    pub(crate) fn with_year_zhi_based(mut self, year_zhi_idx: usize) -> Self {
+        push_star!(self, 18 - year_zhi_idx, stars_c, "天哭");
+        push_star!(self, year_zhi_idx + 6, stars_c, "天虛");
+        push_star!(self, year_zhi_idx + 4, stars_c, "龍池");
+        push_star!(self, 22 - year_zhi_idx, stars_c, "鳳閣");
+        push_star!(self, 15 - year_zhi_idx, stars_c, "紅鸞");
+        push_star!(self, 21 - year_zhi_idx, stars_c, "天喜");
+        push_star!(
+            self,
+            (5 + (((10 + year_zhi_idx) % 12) / 3) * 3) % 12,
+            stars_c,
+            "孤辰"
+        );
+        push_star!(
+            self,
+            (1 + (((10 + year_zhi_idx) % 12) / 3) * 3) % 12,
+            stars_c,
+            "寡宿"
+        );
+
+        let feilian: [usize; 12] = [8, 9, 10, 5, 6, 7, 2, 3, 4, 11, 0, 1];
+        push_star!(self, feilian[year_zhi_idx], stars_c, "蜚廉");
+
+        let posui: [usize; 3] = [5, 1, 9];
+        push_star!(self, posui[year_zhi_idx % 3], stars_c, "破碎");
+
+        push_star!(self, self.ming_idx + year_zhi_idx, stars_c, "天才");
+        push_star!(self, self.shen_idx + year_zhi_idx, stars_c, "天壽");
+
+        let tianma: [usize; 4] = [2, 11, 8, 5];
+        push_star!(self, tianma[year_zhi_idx % 4], stars_b, "天馬");
+
+        push_star!(self, year_zhi_idx + 1, stars_c, "天空");
+
+        let huagai: [usize; 4] = [4, 1, 10, 7];
+        push_star!(self, huagai[year_zhi_idx % 4], stars_c, "華蓋");
+
+        push_star!(self, year_zhi_idx, stars_c, "太歲");
+
+        let xianchi: [usize; 4] = [9, 6, 3, 0];
+        push_star!(self, xianchi[year_zhi_idx % 4], stars_c, "咸池");
 
         self
     }

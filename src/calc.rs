@@ -29,7 +29,8 @@ pub fn build_palais(info: (i32, u32, u32, f64, bool)) {
         .with_hour_based(birth_hour_idx, birth_year_zhi_idx)
         .with_month_based(birth_month_idx)
         .with_day_based(birth_day_idx, birth_month_idx, birth_hour_idx)
-        .with_year_gan_based(birth_year_gan_idx, is_clockwise);
+        .with_year_gan_based(birth_year_gan_idx, is_clockwise)
+        .with_year_zhi_based(birth_year_zhi_idx);
 
     match display_palais(mp) {
         Ok(_) => (),
