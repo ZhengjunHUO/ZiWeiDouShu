@@ -1,5 +1,5 @@
 use crate::consts::{
-    BOSHI, GAN, MAIN_STARS, PALAIS, SIHUAXING, SIHUA_MAP, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT,
+    BOSHI, CHANGSHENG, CHANGSHENG_IDX, GAN, MAIN_STARS, PALAIS, SIHUAXING, SIHUA_MAP, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT,
     ZHI, ZIWEI_SYSTEM,
 };
 use crate::global::MAIN_STARS_LOCATION;
@@ -337,6 +337,20 @@ impl Mingpan {
 
         let xianchi: [usize; 4] = [9, 6, 3, 0];
         push_star!(self, xianchi[year_zhi_idx % 4], stars_c, "咸池");
+
+        self
+    }
+
+    pub(crate) fn with_changsheng(mut self, is_clockwise: bool) -> Self {
+        let start = CHANGSHENG_IDX[self.wxj_idx];
+
+        for i in 0..12 {
+            if is_clockwise {
+                push_star!(self, (start + i) % 12, stars_d, CHANGSHENG[i]);
+            } else {
+                push_star!(self, (12 + start - i) % 12, stars_d, CHANGSHENG[i]);
+            }
+        }
 
         self
     }

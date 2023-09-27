@@ -62,6 +62,7 @@ pub(crate) const BOSHI: [&str; 12] = [
     "博士", "力士", "青龍", "小耗", "將軍", "奏書", "飛廉", "喜神", "病符", "大耗", "伏兵", "官府",
 ];
 
+pub(crate) const CHANGSHENG_IDX: [usize; 5] = [8, 11, 5, 8, 2];
 pub(crate) const CHANGSHENG: [&str; 12] = [
     "長生", "沐浴", "冠帶", "臨官", "帝旺", "衰", "病", "死", "墓", "絕", "胎", "養",
 ];
