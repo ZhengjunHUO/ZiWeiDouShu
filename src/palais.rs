@@ -1,6 +1,6 @@
 use crate::consts::{
-    BOSHI, CHANGSHENG, CHANGSHENG_IDX, GAN, MAIN_STARS, PALAIS, SIHUAXING, SIHUA_MAP, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT,
-    ZHI, ZIWEI_SYSTEM,
+    BOSHI, CHANGSHENG, CHANGSHENG_IDX, GAN, LUMINO_DICT, LUMINO_LEVEL, MAIN_STARS, PALAIS,
+    SIHUAXING, SIHUA_MAP, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT, ZHI, ZIWEI_SYSTEM,
 };
 use crate::global::MAIN_STARS_LOCATION;
 use crate::structs::Birthday;
@@ -45,7 +45,7 @@ impl Etoile {
 impl std::string::ToString for Etoile {
     fn to_string(&self) -> String {
         let mut rslt = self.name.clone();
-        // TODO: Look into dict for lumino
+        rslt.push_str(LUMINO_LEVEL[self.lumino]);
         match self.hua {
             Some(i) => rslt.push_str(SIHUAXING[i]),
             None => (),
@@ -131,13 +131,12 @@ impl Mingpan {
 
         let mut ms = MAIN_STARS_LOCATION.lock().unwrap();
         ZIWEI_SYSTEM.iter().for_each(|&(idx, star)| {
-            self.all_palais[(self.ziwei_idx + idx) % 12]
-                .stars_a
-                .push(Etoile {
-                    name: star.to_owned(),
-                    lumino: 0,
-                    hua: None,
-                });
+            let palais_idx = (self.ziwei_idx + idx) % 12;
+            self.all_palais[palais_idx].stars_a.push(Etoile {
+                name: star.to_owned(),
+                lumino: LUMINO_DICT.get(star).unwrap()[palais_idx],
+                hua: None,
+            });
             ms.entry(star)
                 .and_modify(|loc| *loc = (self.ziwei_idx + idx) % 12);
         });
@@ -150,13 +149,12 @@ impl Mingpan {
 
         let mut ms = MAIN_STARS_LOCATION.lock().unwrap();
         TIANFU_SYSTEM.iter().for_each(|&(idx, star)| {
-            self.all_palais[(tianfu_idx + idx) % 12]
-                .stars_a
-                .push(Etoile {
-                    name: star.to_owned(),
-                    lumino: 0,
-                    hua: None,
-                });
+            let palais_idx = (tianfu_idx + idx) % 12;
+            self.all_palais[palais_idx].stars_a.push(Etoile {
+                name: star.to_owned(),
+                lumino: LUMINO_DICT.get(star).unwrap()[palais_idx],
+                hua: None,
+            });
             ms.entry(star)
                 .and_modify(|loc| *loc = (tianfu_idx + idx) % 12);
         });
