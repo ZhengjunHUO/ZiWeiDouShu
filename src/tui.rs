@@ -51,6 +51,17 @@ macro_rules! render_block {
             })
             .collect();
 
+        let stars_3: Vec<_> = $mp.all_palais[$mp_idx]
+            .stars_d
+            .iter()
+            .map(|s| {
+                Spans::from(Span::styled(
+                    s.to_string(),
+                    Style::default().fg(Color::Yellow),
+                ))
+            })
+            .collect();
+
         let paragraph_left = Paragraph::new(stars)
             .block($build_block(String::default()))
             .alignment(Alignment::Left);
@@ -61,10 +72,17 @@ macro_rules! render_block {
             .alignment(Alignment::Center);
         $frame.render_widget(paragraph_middle, $target[$target_idx]);
 
-        let text = vec![Spans::from(Span::styled(
-            $mp.all_palais[$mp_idx].gz_name.clone(),
-            Style::default().fg(Color::Blue),
-        ))];
+        let mut text = vec![
+            Spans::from(Span::styled(
+                $mp.all_palais[$mp_idx].gz_name.clone(),
+                Style::default().fg(Color::Blue),
+            )),
+            Spans::from(Span::styled(
+                $mp.all_palais[$mp_idx].daxian.clone(),
+                Style::default().fg(Color::Blue),
+            )),
+        ];
+        text.extend(stars_3);
         let paragraph_right = Paragraph::new(text)
             .block($build_block($mp.all_palais[$mp_idx].name.clone()))
             .alignment(Alignment::Right);

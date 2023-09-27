@@ -15,6 +15,7 @@ pub(crate) struct Palais {
     pub(crate) stars_a: Vec<Etoile>,
     pub(crate) stars_b: Vec<Etoile>,
     pub(crate) stars_c: Vec<Etoile>,
+    pub(crate) stars_d: Vec<Etoile>,
 }
 
 #[derive(Debug, Default)]
@@ -285,9 +286,9 @@ impl Mingpan {
         // 博士十二神
         for i in 0..12 {
             if is_clockwise {
-                push_star!(self, lucun_idx + i, stars_c, BOSHI[i]);
+                push_star!(self, lucun_idx + i, stars_d, BOSHI[i]);
             } else {
-                push_star!(self, 12 + lucun_idx - i, stars_c, BOSHI[i]);
+                push_star!(self, 12 + lucun_idx - i, stars_d, BOSHI[i]);
             }
         }
 
@@ -336,6 +337,24 @@ impl Mingpan {
 
         let xianchi: [usize; 4] = [9, 6, 3, 0];
         push_star!(self, xianchi[year_zhi_idx % 4], stars_c, "咸池");
+
+        self
+    }
+
+    pub(crate) fn with_daxian(mut self, is_clockwise: bool) -> Self {
+        let mut begin = self.wxj_idx + 2;
+        let mut end = self.wxj_idx + 11;
+
+        for i in 0..12 {
+            if is_clockwise {
+                self.all_palais[(self.ming_idx + i) % 12].daxian = format!("{}-{}", begin, end);
+            } else {
+                self.all_palais[(12 + self.ming_idx - i) % 12].daxian =
+                    format!("{}-{}", begin, end);
+            }
+            begin += 10;
+            end += 10;
+        }
 
         self
     }
