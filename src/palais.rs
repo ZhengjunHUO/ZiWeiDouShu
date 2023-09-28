@@ -40,6 +40,11 @@ impl Etoile {
         self.name = name;
         self
     }
+
+    pub(crate) fn with_lumino(mut self, level: usize) -> Self {
+        self.lumino = level;
+        self
+    }
 }
 
 impl std::string::ToString for Etoile {
@@ -56,9 +61,14 @@ impl std::string::ToString for Etoile {
 
 macro_rules! push_star {
     ($obj: ident, $palais_idx: expr, $star_array: ident, $star_name: expr) => {
-        $obj.all_palais[($palais_idx) % 12]
-            .$star_array
-            .push(Etoile::default().with_name(String::from($star_name)));
+        $obj.all_palais[($palais_idx) % 12].$star_array.push(
+            Etoile::default()
+                .with_name(String::from($star_name))
+                .with_lumino(match LUMINO_DICT.get($star_name) {
+                    Some(list) => list[($palais_idx) % 12],
+                    None => 0,
+                }),
+        );
     };
 }
 
