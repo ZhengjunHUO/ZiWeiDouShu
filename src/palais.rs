@@ -1,6 +1,6 @@
 use crate::consts::{
-    BOSHI, CHANGSHENG, CHANGSHENG_IDX, GAN, LUMINO_DICT, LUMINO_LEVEL, MAIN_STARS, PALAIS,
-    SIHUAXING, SIHUA_MAP, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT, ZHI, ZIWEI_SYSTEM,
+    BOSHI, CHANGSHENG, CHANGSHENG_IDX, GAN, LUMINO_DICT, LUMINO_LEVEL, MAIN_STARS, MINGZHU, PALAIS,
+    SHENZHU, SIHUAXING, SIHUA_MAP, TIANFU_SYSTEM, WUXINGJU, WUXINGJU_DICT, ZHI, ZIWEI_SYSTEM,
 };
 use crate::global::MAIN_STARS_LOCATION;
 use crate::structs::Birthday;
@@ -349,6 +349,7 @@ impl Mingpan {
         self
     }
 
+    /// 长生十二神
     pub(crate) fn with_changsheng(mut self, is_clockwise: bool) -> Self {
         let start = CHANGSHENG_IDX[self.wxj_idx];
 
@@ -363,6 +364,7 @@ impl Mingpan {
         self
     }
 
+    /// 十年大运
     pub(crate) fn with_daxian(mut self, is_clockwise: bool) -> Self {
         let mut begin = self.wxj_idx + 2;
         let mut end = self.wxj_idx + 11;
@@ -378,6 +380,16 @@ impl Mingpan {
             end += 10;
         }
 
+        self
+    }
+
+    /// 安命/身主星 dep: with_shenming_palais
+    pub(crate) fn with_ms_zhuxing(mut self, year_zhi_idx: usize) -> Self {
+        self.info.push_str("\n命主：");
+        self.info.push_str(MAIN_STARS[MINGZHU[self.ming_idx]]);
+
+        self.info.push_str("\n身主：");
+        self.info.push_str(MAIN_STARS[SHENZHU[year_zhi_idx % 6]]);
         self
     }
 }

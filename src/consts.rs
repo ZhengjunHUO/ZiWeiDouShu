@@ -58,6 +58,9 @@ pub(crate) const MAIN_STARS: [&str; 28] = [
     "地空", "地劫", "祿存", "天馬",
 ];
 
+pub(crate) const MINGZHU: [usize; 12] = [8, 9, 26, 17, 5, 3, 13, 3, 5, 17, 26, 9];
+pub(crate) const SHENZHU: [usize; 6] = [22, 10, 11, 4, 16, 1];
+
 pub(crate) const BOSHI: [&str; 12] = [
     "博士", "力士", "青龍", "小耗", "將軍", "奏書", "飛廉", "喜神", "病符", "大耗", "伏兵", "官府",
 ];
