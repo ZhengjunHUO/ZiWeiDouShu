@@ -81,6 +81,18 @@ macro_rules! render_block {
                 $mp.all_palais[$mp_idx].daxian.clone(),
                 Style::default().fg(Color::Blue),
             )),
+            Spans::from(Span::styled(
+                $mp.all_palais[$mp_idx].xiaoxian_1.clone(),
+                Style::default()
+                    .fg(Color::Blue)
+                    .add_modifier(Modifier::UNDERLINED),
+            )),
+            Spans::from(Span::styled(
+                $mp.all_palais[$mp_idx].xiaoxian_2.clone(),
+                Style::default()
+                    .fg(Color::Blue)
+                    .add_modifier(Modifier::UNDERLINED),
+            )),
         ];
         text.extend(stars_3);
         let paragraph_right = Paragraph::new(text)

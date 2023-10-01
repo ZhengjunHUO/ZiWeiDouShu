@@ -33,7 +33,8 @@ pub fn build_palais(info: (i32, u32, u32, f64, bool)) {
         .with_year_zhi_based(birth_year_zhi_idx)
         .with_changsheng(is_clockwise)
         .with_daxian(is_clockwise)
-        .with_ms_zhuxing(birth_year_zhi_idx);
+        .with_ms_zhuxing(birth_year_zhi_idx)
+        .with_xiaoxian(birth_year_zhi_idx, info.4);
 
     match display_palais(mp) {
         Ok(_) => (),

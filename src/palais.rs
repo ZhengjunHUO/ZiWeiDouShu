@@ -11,7 +11,8 @@ pub(crate) struct Palais {
     pub(crate) gz_name: String,
     pub(crate) gz_idx: (usize, usize),
     pub(crate) daxian: String,
-    pub(crate) xiaoxian: String,
+    pub(crate) xiaoxian_1: String,
+    pub(crate) xiaoxian_2: String,
     pub(crate) stars_a: Vec<Etoile>,
     pub(crate) stars_b: Vec<Etoile>,
     pub(crate) stars_c: Vec<Etoile>,
@@ -364,6 +365,16 @@ impl Mingpan {
         self
     }
 
+    /// 安命/身主星 dep: with_shenming_palais
+    pub(crate) fn with_ms_zhuxing(mut self, year_zhi_idx: usize) -> Self {
+        self.info.push_str("\n命主：");
+        self.info.push_str(MAIN_STARS[MINGZHU[self.ming_idx]]);
+
+        self.info.push_str("\n身主：");
+        self.info.push_str(MAIN_STARS[SHENZHU[year_zhi_idx % 6]]);
+        self
+    }
+
     /// 十年大运
     pub(crate) fn with_daxian(mut self, is_clockwise: bool) -> Self {
         let mut begin = self.wxj_idx + 2;
@@ -383,13 +394,28 @@ impl Mingpan {
         self
     }
 
-    /// 安命/身主星 dep: with_shenming_palais
-    pub(crate) fn with_ms_zhuxing(mut self, year_zhi_idx: usize) -> Self {
-        self.info.push_str("\n命主：");
-        self.info.push_str(MAIN_STARS[MINGZHU[self.ming_idx]]);
+    /// 小限
+    pub(crate) fn with_xiaoxian(mut self, year_zhi_idx: usize, is_clockwise: bool) -> Self {
+        let start_idx = 10 - (year_zhi_idx % 4) * 3;
 
-        self.info.push_str("\n身主：");
-        self.info.push_str(MAIN_STARS[SHENZHU[year_zhi_idx % 6]]);
+        (0..96).into_iter().for_each(|i| {
+            let current;
+            if is_clockwise {
+                current = (start_idx + i) % 12;
+            } else {
+                current = (120 + start_idx - i) % 12;
+            }
+
+            if i < 48 {
+                self.all_palais[current]
+                    .xiaoxian_1
+                    .push_str(&format!("{} ", i + 1));
+            } else {
+                self.all_palais[current]
+                    .xiaoxian_2
+                    .push_str(&format!("{} ", i + 1));
+            }
+        });
         self
     }
 }
