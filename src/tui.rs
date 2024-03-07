@@ -236,19 +236,19 @@ fn ui<B: Backend>(f: &mut Frame<B>) {
 
     let mp = MINGPAN.lock().unwrap();
 
-    (5..9).into_iter().for_each(|idx| {
+    (5..9).for_each(|idx| {
         render_block!(mp, f, build_block, idx, top_horz, idx - 5);
     });
 
-    (11..15).rev().into_iter().for_each(|idx| {
+    (11..15).rev().for_each(|idx| {
         render_block!(mp, f, build_block, idx % 12, bottom_horz, 14 - idx);
     });
 
-    (3..5).rev().into_iter().for_each(|idx| {
+    (3..5).rev().for_each(|idx| {
         render_block!(mp, f, build_block, idx, mid_left_parts, 4 - idx);
     });
 
-    (9..11).into_iter().for_each(|idx| {
+    (9..11).for_each(|idx| {
         render_block!(mp, f, build_block, idx, mid_right_parts, idx - 9);
     });
 

@@ -12,12 +12,11 @@ pub fn build_palais(info: (i32, u32, u32, f64, bool)) {
     let birth_month_idx = birth.lunar.month() as usize;
     let birth_year_gan_idx = birth.year.0 as usize;
     let birth_year_zhi_idx = birth.year.1 as usize;
-    let is_clockwise;
-    match birth.gender.as_ref() {
-        "陽男" | "陰女" => is_clockwise = true,
-        "陰男" | "陽女" => is_clockwise = false,
+    let is_clockwise = match birth.gender.as_ref() {
+        "陽男" | "陰女" => true,
+        "陰男" | "陽女" => false,
         _ => unreachable!(),
-    }
+    };
 
     let mp = Mingpan::default()
         .with_info(&birth)

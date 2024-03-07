@@ -34,7 +34,7 @@ impl Autocomplete for HourCompleter {
             Some(suggestion) => Replacement::Some(suggestion),
             None => {
                 let list = self.filter_candidates(input);
-                if list.len() == 0 {
+                if list.is_empty() {
                     Replacement::None
                 } else {
                     Replacement::Some(list[0].clone())
@@ -57,7 +57,7 @@ pub fn birthday_from_prompt() -> (i32, u32, u32, f64, bool) {
     let mut hour: f64 = 10.0;
 
     let hc = HourCompleter {
-        hours: (1..25).into_iter().map(|i| i.to_string()).collect(),
+        hours: (1..25).map(|i| i.to_string()).collect(),
     };
     let resp = Text::new("Choose the hour: ")
         .with_autocomplete(hc)

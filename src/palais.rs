@@ -52,9 +52,8 @@ impl std::string::ToString for Etoile {
     fn to_string(&self) -> String {
         let mut rslt = self.name.clone();
         rslt.push_str(LUMINO_LEVEL[self.lumino]);
-        match self.hua {
-            Some(i) => rslt.push_str(SIHUAXING[i]),
-            None => (),
+        if let Some(i) = self.hua {
+            rslt.push_str(SIHUAXING[i]);
         }
         rslt
     }
@@ -83,7 +82,7 @@ impl Mingpan {
     pub(crate) fn with_tiangan_name(mut self, year_gan_idx: usize) -> Self {
         let start_idx = ((year_gan_idx % 5) * 2 + 2) % 10;
 
-        (0..12).into_iter().for_each(|idx| {
+        (0..12).for_each(|idx| {
             self.all_palais[(2 + idx) % 12].gz_name =
                 format!("{}{}", GAN[(start_idx + idx) % 10], ZHI[(2 + idx) % 12]);
             self.all_palais[(2 + idx) % 12].gz_idx = ((start_idx + idx) % 10, (2 + idx) % 12);
@@ -99,7 +98,7 @@ impl Mingpan {
         let shen_idx = (zishi_idx + hour) % 12;
         self.shen_idx = shen_idx;
 
-        (0..12).into_iter().for_each(|idx| {
+        (0..12).for_each(|idx| {
             let curr_idx = (ming_idx + idx) % 12;
             let mut curr_name = String::from(PALAIS[idx]);
             if curr_idx == shen_idx {
@@ -116,11 +115,11 @@ impl Mingpan {
         let gan = gz.0;
         let mut zhi = gz.1;
         if zhi >= 6 {
-            zhi = zhi - 6;
+            zhi -= 6;
         }
 
         self.wxj_idx = *WUXINGJU_DICT.get(&(gan / 2, zhi / 2)).unwrap();
-        self.info.push_str("\n");
+        self.info.push('\n');
         self.info.push_str(WUXINGJU[self.wxj_idx]);
         self
     }
@@ -278,12 +277,11 @@ impl Mingpan {
             let star = MAIN_STARS[sihua[i]];
             let star_loc = *ms.get(star).unwrap();
 
-            let list;
-            if sihua[i] < 14 {
-                list = &mut self.all_palais[star_loc].stars_a
+            let list = if sihua[i] < 14 {
+                &mut self.all_palais[star_loc].stars_a
             } else {
-                list = &mut self.all_palais[star_loc].stars_b
-            }
+                &mut self.all_palais[star_loc].stars_b
+            };
             for s in list {
                 if s.name == star {
                     s.hua = Some(i);
@@ -398,13 +396,12 @@ impl Mingpan {
     pub(crate) fn with_xiaoxian(mut self, year_zhi_idx: usize, is_clockwise: bool) -> Self {
         let start_idx = 10 - (year_zhi_idx % 4) * 3;
 
-        (0..96).into_iter().for_each(|i| {
-            let current;
-            if is_clockwise {
-                current = (start_idx + i) % 12;
+        (0..96).for_each(|i| {
+            let current = if is_clockwise {
+                (start_idx + i) % 12
             } else {
-                current = (120 + start_idx - i) % 12;
-            }
+                (120 + start_idx - i) % 12
+            };
 
             if i < 48 {
                 self.all_palais[current]
