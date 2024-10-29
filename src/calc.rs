@@ -2,6 +2,7 @@ use crate::consts::ZHI_DICT;
 use crate::palais::Mingpan;
 use crate::structs::Birthday;
 use crate::tui::display_palais;
+use std::process::exit;
 
 pub fn build_palais(info: (i32, u32, u32, f64, bool)) {
     let birth = Birthday::from_gregorian(info);
@@ -39,4 +40,36 @@ pub fn build_palais(info: (i32, u32, u32, f64, bool)) {
         Ok(_) => (),
         Err(e) => println!("Error occurred during display: {}", e),
     }
+}
+
+pub fn birthday_from_arg(mut d: u64) -> (i32, u32, u32, f64, bool) {
+    let gender = d % 10 != 0;
+
+    d /= 10;
+    let hour = d % 100;
+    if hour > 24 {
+        println!("Hour should between 1-24, actually got {hour}, quit");
+        exit(1)
+    }
+
+    d /= 100;
+    let day = d % 100;
+    if day > 31 || day == 0 {
+        println!("Day should between 1-31, actually got {day}, quit");
+        exit(1)
+    }
+
+    d /= 100;
+    let month = d % 100;
+    if month > 12 || month == 0 {
+        println!("Month should between 1-12, actually got {month}, quit");
+        exit(1)
+    }
+
+    let year = d / 100;
+    if year < 1900 {
+        println!("Year should after 1900, actually got {year}, quit");
+        exit(1)
+    }
+    (year as i32, month as u32, day as u32, hour as f64, gender)
 }
